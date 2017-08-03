@@ -2,16 +2,15 @@
 using GroupM.Content.Domain.Interfaces;
 using GroupM.Content.Entities;
 using GroupM.Content.Persistence.Interfaces;
-using System;
 using System.Text.RegularExpressions;
 
 namespace GroupM.Content.Domain
 {
-    public class TextAnalysisService : ITextAnalysisService
+    public class RegexBasedTextAnalysisService : ITextAnalysisService
     {
         private INegativeWordsRepository negativeWordsRepository;
 
-        public TextAnalysisService(INegativeWordsRepository negativeWordsRepository)
+        public RegexBasedTextAnalysisService(INegativeWordsRepository negativeWordsRepository)
         {
             this.negativeWordsRepository = negativeWordsRepository;
         }

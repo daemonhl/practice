@@ -1,5 +1,4 @@
-﻿using GroupM.Content.Domain;
-using GroupM.Content.Domain.Interfaces;
+﻿using GroupM.Content.Domain.Interfaces;
 using GroupM.Content.Entities;
 using GroupM.Content.Persistence.Interfaces;
 using Microsoft.Practices.Unity;
@@ -41,7 +40,7 @@ namespace GroupM.Content.Domain.Test
             unityContainer = new UnityContainer();
 
             unityContainer.RegisterInstance(negativeWordsRepository);
-            unityContainer.RegisterType<ITextAnalysisService, TextAnalysisService>();
+            unityContainer.RegisterType<ITextAnalysisService, RegexBasedTextAnalysisService>();
         }
 
         [SetUp]
