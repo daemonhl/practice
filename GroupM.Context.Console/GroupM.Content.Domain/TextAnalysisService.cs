@@ -17,7 +17,18 @@ namespace GroupM.Content.Domain
 
         public TextAnalysisResult ProcessText(UserText text)
         {
-            throw new NotImplementedException();
+            var badWordsCount = 0;
+            var negativeWordsCollection = negativeWordsRepository.GetAll();
+
+            foreach (var bannedWord in negativeWordsCollection)
+            {
+                if (text.Text.Contains(bannedWord.Text))
+                {
+                    badWordsCount++;
+                }
+            }
+
+            return new TextAnalysisResult(badWordsCount);
         }
     }
 }
