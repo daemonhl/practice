@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GroupM.Content.Domain.Entities;
+using GroupM.Content.Domain.Interfaces;
+using GroupM.Content.Entities;
+using GroupM.Content.Persistence.Interfaces;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
+using System;
 
 namespace GroupM.Content.App
 {
@@ -10,26 +12,33 @@ namespace GroupM.Content.App
     {
         public static void Main(string[] args)
         {
-            var bannedWords = new List<string> { "horrible", "nasty", "bad", "swine" };
-            string content = "The weather in London in August is bad. Is like winter, horrible";
+            IUnityContainer container = InitializeUnityContainer();
 
-            int badWords = 0;
+            var analysisService = container.Resolve<ITextAnalysisService>();
+            var textsRepository = container.Resolve<IUserTextsRepository>();
 
-            foreach (var bannedWord in bannedWords)
-            {
-                if (content.Contains(bannedWord))
-                {
-                    badWords = badWords + 1;
-                }
-            }
+            // choose a text
+            var text = textsRepository.Get(1);
 
+            // process the text
+            var result = analysisService.ProcessText(text);
+
+            ShowResult(text, result);
+        }
+
+        private static void ShowResult(UserText text, TextAnalysisResult result)
+        {
             Console.WriteLine("Text:");
-            Console.WriteLine(content);
-            Console.WriteLine("Total negative words: " + badWords);
+            Console.WriteLine(text.Text);
+            Console.WriteLine("Total negative words: {0}", result.TotalNegativeWords);
 
             Console.WriteLine("Press ANY key to exit.");
             Console.ReadKey();
         }
 
+        private static IUnityContainer InitializeUnityContainer()
+        {
+            return new UnityContainer().LoadConfiguration();
+        }
     }
 }
