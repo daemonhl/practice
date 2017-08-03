@@ -6,6 +6,7 @@ using Microsoft.Practices.Unity;
 using NSubstitute;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace GroupM.Content.Domain.Test
 {
@@ -20,10 +21,20 @@ namespace GroupM.Content.Domain.Test
         {
             // Initialize mocking
             var negativeWordsRepository = Substitute.For<INegativeWordsRepository>();
-            negativeWordsRepository.Get(Arg.Is(1)).Returns(new NegativeWord() { Id = 1, Text = "bad" });
-            negativeWordsRepository.Get(Arg.Is(2)).Returns(new NegativeWord() { Id = 2, Text = "horrible" });
-            negativeWordsRepository.Get(Arg.Is(3)).Returns(new NegativeWord() { Id = 2, Text = "nasty" });
-            negativeWordsRepository.Get(Arg.Is(4)).Returns(new NegativeWord() { Id = 2, Text = "swine" });
+            var negativeWords = new Dictionary<int, NegativeWord>()
+            {
+                {1, new NegativeWord() { Id = 1, Text = "bad" } },
+                {2, new NegativeWord() { Id = 2, Text = "horrible" } },
+                {3, new NegativeWord() { Id = 3, Text = "nasty" } },
+                {4, new NegativeWord() { Id = 4, Text = "swine" } }
+            };
+
+            negativeWordsRepository.Get(Arg.Is(1)).Returns(negativeWords[1]);
+            negativeWordsRepository.Get(Arg.Is(2)).Returns(negativeWords[2]);
+            negativeWordsRepository.Get(Arg.Is(3)).Returns(negativeWords[3]);
+            negativeWordsRepository.Get(Arg.Is(4)).Returns(negativeWords[4]);
+
+            negativeWordsRepository.GetAll().Returns(negativeWords.Values);
 
             // initialize Unity
             unityContainer = new UnityContainer();
@@ -72,6 +83,32 @@ namespace GroupM.Content.Domain.Test
 
             // Act & Assert
             Assert.Throws(typeof(NullReferenceException), () => service.ProcessText(nullUserText));
+        }
+
+        [Test]
+        public void TextAnalysisService_ShouldBeCountingEachInstanceOfNegativeWord()
+        {
+            // Arrange
+            var userText = new UserText() { Id = 1, Text = "The bad weather is not so bad when you're in some horrible situation surrounded by some nasty people" };
+
+            // Act
+            var result = service.ProcessText(userText);
+
+            // Assert
+            Assert.That(result.TotalNegativeWords, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void TextAnalysisService_ShouldNotBeCountingPartialWords()
+        {
+            // Arrange
+            var userText = new UserText() { Id = 1, Text = "This is a badass car" };
+
+            // Act
+            var result = service.ProcessText(userText);
+
+            // Assert
+            Assert.That(result.TotalNegativeWords, Is.EqualTo(0));
         }
 
         [OneTimeTearDown]
