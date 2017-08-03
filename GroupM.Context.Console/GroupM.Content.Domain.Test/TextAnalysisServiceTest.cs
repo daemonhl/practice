@@ -26,7 +26,8 @@ namespace GroupM.Content.Domain.Test
                 {1, new NegativeWord() { Id = 1, Text = "bad" } },
                 {2, new NegativeWord() { Id = 2, Text = "horrible" } },
                 {3, new NegativeWord() { Id = 3, Text = "nasty" } },
-                {4, new NegativeWord() { Id = 4, Text = "swine" } }
+                {4, new NegativeWord() { Id = 4, Text = "swine" } },
+                {5, new NegativeWord() { Id = 5, Text = "theword"} }
             };
 
             negativeWordsRepository.Get(Arg.Is(1)).Returns(negativeWords[1]);
@@ -109,6 +110,19 @@ namespace GroupM.Content.Domain.Test
 
             // Assert
             Assert.That(result.TotalNegativeWords, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void TextAnalysisService_ShouldReturnSixForSpecifiedText()
+        {
+            // Arrange
+            var userText = new UserText() { Id = 1, Text = "Sed theword, totam rem aperiam. Nemo voluthewordptatem thewordquia thewordvoluptas sit sequi theword. Neque theword: theword, theword; velit, sed theword   non eius modi." };
+
+            // Act
+            var result = service.ProcessText(userText);
+
+            // Assert
+            Assert.That(result.TotalNegativeWords, Is.EqualTo(6));
         }
 
         [OneTimeTearDown]
