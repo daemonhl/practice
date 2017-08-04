@@ -1,40 +1,65 @@
 ﻿using GroupM.Content.Persistence.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using GroupM.Content.Entities;
 
 namespace GroupM.Content.Persistence
 {
     public class StaticUserTextsRepository : IUserTextsRepository
     {
+        private static Dictionary<int, UserText> texts;
+        private static int lastId = 1;
+
+        public StaticUserTextsRepository()
+        {
+            texts = new Dictionary<int, UserText>() {
+                { 1, new UserText() { Id = 1, Text = "The weather in London in August is bad. Is like winter, horrible" } }
+            };
+        }
+
         public void Add(UserText entity)
         {
-            throw new NotImplementedException();
+            entity.Id = ++lastId;
+
+            texts.Add(entity.Id, entity);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (texts.ContainsKey(id))
+            {
+                texts[id] = null;
+            }
         }
 
         public UserText Get(int id)
         {
-            throw new NotImplementedException();
+            return texts.ContainsKey(id) ? texts[id] : null;
         }
 
         public IEnumerable<UserText> GetAll()
         {
-            throw new NotImplementedException();
+            return texts.Values;
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            // nothing to do
         }
 
         public void Update(UserText entity)
         {
-            throw new NotImplementedException();
+            if (texts.ContainsKey(entity.Id))
+            {
+                texts[entity.Id] = entity;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
