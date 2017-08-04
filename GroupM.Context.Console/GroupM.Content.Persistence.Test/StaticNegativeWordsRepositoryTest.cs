@@ -56,12 +56,12 @@ namespace GroupM.Content.Persistence.Test
         }
 
         [Test]
-        public void StaticNegativeWordsRepository_ShouldThrowNotFoundIfDoesntExist()
+        public void StaticNegativeWordsRepository_ShouldReturnNullIfDoesntExist()
         {
             // Arrange
 
             // Act & Assert
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { repository.Get(10); });
+            Assert.IsNull(repository.Get(10));
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace GroupM.Content.Persistence.Test
         }
 
         [Test]
-        public void StaticNegativeWordsRepository_ShouldNotReturnDeletedItem()
+        public void StaticNegativeWordsRepository_ShouldReturnNullOnDeletedItem()
         {
             // Arrange
 
@@ -101,7 +101,7 @@ namespace GroupM.Content.Persistence.Test
             repository.Delete(0);
 
             // Assert
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { repository.Get(0); });
+            Assert.IsNull(repository.Get(0));
         }
 
         [Test]
