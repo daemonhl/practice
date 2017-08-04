@@ -1,4 +1,5 @@
 ﻿using GroupM.Content.Entities;
+using GroupM.Content.Persistence.Interfaces;
 using Microsoft.Practices.Unity;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -14,6 +15,7 @@ namespace GroupM.Content.Persistence.Test
     public class StaticNegativeWordsRepositoryTest
     {
         private IUnityContainer unityContainer;
+        private INegativeWordsRepository repository;
 
         [OneTimeSetUp]
         public void Init()
@@ -21,11 +23,16 @@ namespace GroupM.Content.Persistence.Test
 
         }
 
+        [SetUp]
+        public void SetupTest()
+        {
+            repository = new StaticNegativeWordsRepository();
+        }
+
         [Test]
         public void StaticNegativeWordsRepository_ShouldHavePredefinedData()
         {
             // Arrange
-            var repository = new StaticNegativeWordsRepository();
 
             // Act
             var predefinedItems = repository.GetAll();
@@ -39,7 +46,6 @@ namespace GroupM.Content.Persistence.Test
         public void StaticNegativeWordsRepository_ShouldReturnById()
         {
             // Arrange
-            var repository = new StaticNegativeWordsRepository();
             var expectedItem = new NegativeWord() { Id = 0, Text = "horrible" };
 
             // Act
@@ -47,6 +53,67 @@ namespace GroupM.Content.Persistence.Test
 
             // Assert
             Assert.IsTrue(expectedItem.Id == item.Id && expectedItem.Text == item.Text);
+        }
+
+        [Test]
+        public void StaticNegativeWordsRepository_ShouldThrowNotFoundIfDoesntExist()
+        {
+            // Arrange
+
+            // Act & Assert
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { repository.Get(10); });
+        }
+
+        [Test]
+        public void StaticNegativeWordsRepository_ShouldAddAndReturnItem()
+        {
+            // Arrange
+            var newItem = new NegativeWord() { Text = "terrible" };
+
+            // Act
+            repository.Add(newItem);
+            var addedItem = repository.Get(newItem.Id);
+
+            // Assert
+            Assert.AreEqual(newItem, addedItem);
+        }
+
+        [Test]
+        public void StaticNegativeWordsRepository_ShouldUpdateItem()
+        {
+            // Arrange
+            var replacement = new NegativeWord() { Id = 0, Text = "creepy" };
+
+            // Act
+            repository.Update(replacement);
+            var updatedItem = repository.Get(0);
+
+            // Assert
+            Assert.IsTrue(updatedItem.Id == replacement.Id && updatedItem.Text == replacement.Text);
+        }
+
+        [Test]
+        public void StaticNegativeWordsRepository_ShouldNotReturnDeletedItem()
+        {
+            // Arrange
+
+            // Act
+            repository.Delete(0);
+
+            // Assert
+            Assert.Throws(typeof(ArgumentOutOfRangeException), () => { repository.Get(0); });
+        }
+
+        [Test]
+        public void StaticNegativeWordsRepository_ShouldNotBeThrowingNotFound()
+        {
+            // Arrange
+
+            // Act
+            repository.Delete(0);
+
+            // Assert
+            Assert.DoesNotThrow(() => { repository.Delete(0); });
         }
     }
 }
