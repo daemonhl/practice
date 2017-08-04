@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupM.Content.App", "Group
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupM.Content.Entities", "GroupM.Content.Entities\GroupM.Content.Entities.csproj", "{AD8E9D24-209A-4900-AEB0-3A0705659D74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupM.Content.Persistence.Test", "GroupM.Content.Persistence.Test\GroupM.Content.Persistence.Test.csproj", "{8B1CB365-59F6-4FB5-866F-5BA8535A72CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,11 +43,16 @@ Global
 		{AD8E9D24-209A-4900-AEB0-3A0705659D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD8E9D24-209A-4900-AEB0-3A0705659D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD8E9D24-209A-4900-AEB0-3A0705659D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1CB365-59F6-4FB5-866F-5BA8535A72CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1CB365-59F6-4FB5-866F-5BA8535A72CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1CB365-59F6-4FB5-866F-5BA8535A72CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1CB365-59F6-4FB5-866F-5BA8535A72CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6BEFB193-14BB-455D-BA58-B23058785BB1} = {B3EB3E2F-8831-44E4-96AE-06530EB0AF2A}
+		{8B1CB365-59F6-4FB5-866F-5BA8535A72CF} = {B3EB3E2F-8831-44E4-96AE-06530EB0AF2A}
 	EndGlobalSection
 EndGlobal

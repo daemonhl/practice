@@ -37,7 +37,7 @@ namespace GroupM.Content.Persistence
 
         public NegativeWord Get(int id)
         {
-            return words[id];
+            return words.ContainsKey(id) ? words[id] : null;
         }
 
         public IEnumerable<NegativeWord> GetAll()

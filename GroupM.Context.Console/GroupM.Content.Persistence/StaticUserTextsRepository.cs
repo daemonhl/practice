@@ -11,7 +11,7 @@ namespace GroupM.Content.Persistence
     public class StaticUserTextsRepository : IUserTextsRepository
     {
         private static Dictionary<int, UserText> texts;
-        private static int lastId = 0;
+        private static int lastId = 1;
 
         public StaticUserTextsRepository()
         {
@@ -37,7 +37,7 @@ namespace GroupM.Content.Persistence
 
         public UserText Get(int id)
         {
-            return texts[id];
+            return texts.ContainsKey(id) ? texts[id] : null;
         }
 
         public IEnumerable<UserText> GetAll()
