@@ -10,34 +10,56 @@ namespace GroupM.Content.Persistence
 {
     public class StaticNegativeWordsRepository : INegativeWordsRepository
     {
+        private static Dictionary<int, NegativeWord> words;
+        private static int lastId = 0;
+
+        public StaticNegativeWordsRepository()
+        {
+            var badWords = new List<string> { "horrible", "nasty", "bad", "swine" };
+            words = badWords.ToDictionary(key => badWords.IndexOf(key), value => new NegativeWord { Id = badWords.IndexOf(value), Text = value });
+            lastId = badWords.Count - 1;
+        }
+
         public void Add(NegativeWord entity)
         {
-            throw new NotImplementedException();
+            entity.Id = ++lastId;
+
+            words.Add(entity.Id, entity);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (words.ContainsKey(id))
+            {
+                words[id] = null;
+            }
         }
 
         public NegativeWord Get(int id)
         {
-            throw new NotImplementedException();
+            return words.ContainsKey(id) ? words[id] : null;
         }
 
         public IEnumerable<NegativeWord> GetAll()
         {
-            throw new NotImplementedException();
+            return words.Values;
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            // nothing to do
         }
 
         public void Update(NegativeWord entity)
         {
-            throw new NotImplementedException();
+            if (words.ContainsKey(entity.Id))
+            {
+                words[entity.Id] = entity;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
